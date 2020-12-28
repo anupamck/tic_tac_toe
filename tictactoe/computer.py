@@ -3,7 +3,7 @@ import random
 
 # Should I have a class for Computer?
 
-def find_win(board, player):   # Finds winning position in near win board status
+def find_win(board, player):
     marker = assign_marker(player)
     result = None
     for sequence in board.sequences:
@@ -18,25 +18,15 @@ def find_win(board, player):   # Finds winning position in near win board status
         return result
 
 
-def make_random_move(board): # makes random move in empty positions
+def make_random_move(board):
     empty_cells = board.get_empty_positions()
     move = random.choice(empty_cells)
     board.mark_move(move, "computer")
 
 
-def find_winning_position(sequence, board): # Find winning position in near win sequence
+def find_winning_position(sequence, board):
     for position in sequence:
         if board.status[position] == ' ':
             return position
         else:
             pass
-
-
-def get_empty_positions(board): # get all empty positions from board
-    result = []
-    for k, v in board.status.items():
-        if v == ' ':
-            result.append(k)
-        else:
-            pass
-    return result

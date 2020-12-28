@@ -4,7 +4,7 @@ from tictactoe.engine import declare_result, toggle_player
 
 # Have kept all imports minimal and clean for traceability
 
-if __name__ == "__main__":  # Main function that starts and runs the game
+if __name__ == "__main__":  
     b = Board()
     print("Welcome to a game of tic-tac-toe.")
     player = choose_first_mover()

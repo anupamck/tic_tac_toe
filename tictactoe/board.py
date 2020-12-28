@@ -2,7 +2,7 @@ class MoveError(Exception):
     pass
 
 
-def assign_marker(player):  # Assigns marker to player
+def assign_marker(player):
     if player.lower() == "human": # Where do I put this function!?
         return "X"
     elif player.lower() == "comp" or player.lower() == "computer":
@@ -30,7 +30,7 @@ class Board:
 
 
 
-    def print_board(self): # Prints board status to console
+    def print_board(self):
         print("_________________\n")  # How do I write unit tests?
         i = 1
         for cell in self.status.values():
@@ -46,7 +46,7 @@ class Board:
             i += 1
 
 
-    def mark_move(self, move, player): # Marks move on board
+    def mark_move(self, move, player):
         marker = assign_marker(player)
         if self.status[move] == " ":
             self.status[move] = marker
@@ -54,14 +54,14 @@ class Board:
             raise MoveError("Cell already marked")
 
 
-    def get_sequence_string(self, sequence): # Output sequence position as a string
+    def get_sequence_string(self, sequence):
         string_list = []
         for position in sequence:
             string_list.append(self.status[position])
         return ''.join(string_list)
 
 
-    def check_result(self, player): # Returns current result - win, draw, near win or unclear
+    def check_result(self, player):
         marker = assign_marker(player)
         result = ""
         near_win = False
@@ -90,13 +90,13 @@ class Board:
         else:
             raise MoveError("Unknown result encountered")
 
-    def mark_human_move(self, move):   # Marks human move with some error handling
+    def mark_human_move(self, move):
         if move in self.status.keys(): # Architecture is rigid for human vs. computer player
             self.mark_move(move, "human")
         else:
             raise MoveError("Invalid input")
 
-    def get_empty_positions(self):  # Returns a list of empty positions on board
+    def get_empty_positions(self):  
         result = []
         for k, v in self.status.items():
             if v == ' ':

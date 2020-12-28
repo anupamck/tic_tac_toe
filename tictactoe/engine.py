@@ -5,7 +5,7 @@ import random
 
 # How do I organize functions on such pages?
 
-def get_player_move(player, board): # gets and makes player move from both computer and human player
+def get_player_move(player, board):
     if player == "human": # This function does too much. How can I refactor?
         move = input("Enter your move > ") # In which module do I put this function?
         try:
@@ -25,7 +25,7 @@ def get_player_move(player, board): # gets and makes player move from both compu
     board.print_board()
 
 
-def toggle_player(player):  # toggles between human and computer player
+def toggle_player(player):
     if player == "human":
         return "computer"
     elif player == "computer":
@@ -34,7 +34,7 @@ def toggle_player(player):  # toggles between human and computer player
         raise MoveError("Player must be human or computer")
 
 
-def choose_first_mover():   # chooses whether human or comp goes first
+def choose_first_mover():
     first_mover = random.choice(["human", "computer"])
     if first_mover == "human":
         print("You get to play the first move.")
@@ -44,7 +44,7 @@ def choose_first_mover():   # chooses whether human or comp goes first
         raise MoveError("First mover must be human or computer")
     return first_mover
 
-def declare_result(winner):  # prints the result to the output
+def declare_result(winner):  
     if winner == "computer": # Should I have included  this as a method inside Board?
         print("Game over. Computer wins!")
         exit(0)
