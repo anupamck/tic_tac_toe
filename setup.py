@@ -4,7 +4,7 @@ except ImportError:
     from distutils.core. import setuptools
 
 config = {
-    'description': 'My Project',
+    'description': 'Tic-tac-toe using OO principles',
     'author': 'Anupam Krishnamurthy',
     'url': '<Project URL>',
     'download_url': '<Download URL>',

@@ -1,16 +1,7 @@
-from tictactoe.board import *
+from tictactoe.board import MoveError, assign_marker
 import random
 
-class Computer:
-    pass
-
-def find_winning_position(sequence, board): # Find winning position in near win sequence
-    for position in sequence:
-        if board.status[position] == ' ':
-            return position
-        else:
-            pass
-
+# Should I have a class for Computer?
 
 def find_win(board, player):   # Finds winning position in near win board status
     marker = assign_marker(player)
@@ -27,6 +18,20 @@ def find_win(board, player):   # Finds winning position in near win board status
         return result
 
 
+def make_random_move(board): # makes random move in empty positions
+    empty_cells = board.get_empty_positions()
+    move = random.choice(empty_cells)
+    board.mark_move(move, "computer")
+
+
+def find_winning_position(sequence, board): # Find winning position in near win sequence
+    for position in sequence:
+        if board.status[position] == ' ':
+            return position
+        else:
+            pass
+
+
 def get_empty_positions(board): # get all empty positions from board
     result = []
     for k, v in board.status.items():
@@ -35,8 +40,3 @@ def get_empty_positions(board): # get all empty positions from board
         else:
             pass
     return result
-
-def make_random_move(board): # makes random move in empty positions
-    empty_cells = board.get_empty_positions()
-    move = random.choice(empty_cells)
-    board.mark_move(move, "computer")

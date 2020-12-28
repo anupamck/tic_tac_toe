@@ -1,5 +1,5 @@
-from tictactoe.board import *
-from tictactoe.computer import *
+from tictactoe.board import MoveError
+from tictactoe.computer import find_win, make_random_move
 
 import random
 
@@ -12,7 +12,7 @@ def get_player_move(player, board): # gets and makes player move from both compu
             board.mark_human_move(move)
         except(MoveError):
             print("Invalid move. Try again.")
-            get_player_move(player, board)
+            get_player_move(player, board)  # Recursion
     elif player == "computer":
         if board.check_result(player) == "near win":
             next_move = find_win(board, player)
@@ -43,3 +43,16 @@ def choose_first_mover():   # chooses whether human or comp goes first
     else:
         raise MoveError("First mover must be human or computer")
     return first_mover
+
+def declare_result(winner):  # prints the result to the output
+    if winner == "computer": # Should I have included  this as a method inside Board?
+        print("Game over. Computer wins!")
+        exit(0)
+    elif winner == "human":
+        print("Game over. You win!")
+        exit(0)
+    elif winner == "draw":
+        print("Game over. Game drawn.")
+        exit(0)
+    else:
+        MoveError("Invalid argument. Must be 'human', 'computer or 'draw")

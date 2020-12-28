@@ -3,25 +3,13 @@ class MoveError(Exception):
 
 
 def assign_marker(player):  # Assigns marker to player
-    if player.lower() == "human":
+    if player.lower() == "human": # Where do I put this function!?
         return "X"
     elif player.lower() == "comp" or player.lower() == "computer":
         return "O"
     else:
         raise MoveError("Player must be human or computer")
 
-def declare_result(winner):  # prints the result to the output
-    if winner == "computer": # Should I have included  this as a method inside Board?
-        print("Game over. Computer wins!")
-        exit(0)
-    elif winner == "human":
-        print("Game over. You win!")
-        exit(0)
-    elif winner == "draw":
-        print("Game over. Game drawn.")
-        exit(0)
-    else:
-        MoveError("Invalid argument. Must be 'human', 'computer or 'draw")
 
 
 class Board:
@@ -31,7 +19,7 @@ class Board:
                        'bl':' ', 'bm':' ', 'br':' '}
 
 
-        self.sequences = (('tl', 'tm', 'tr'),
+        self.sequences = (('tl', 'tm', 'tr'),   # Had to refactor thrice before arriving at these attributes
                           ('cl', 'cm', 'cr'),
                           ('bl', 'bm', 'br'),
                           ('tl', 'cl', 'bl'),
@@ -39,6 +27,7 @@ class Board:
                           ('tr', 'cr', 'br'),
                           ('tl', 'cm', 'br'),
                           ('tr', 'cm', 'bl'))
+
 
 
     def print_board(self): # Prints board status to console
