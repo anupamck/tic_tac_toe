@@ -1,5 +1,6 @@
 from tictactoe.board import *
-from main import *
+from tictactoe.engine import *
+
 import pytest
 
 def test_get_player_move(monkeypatch):
