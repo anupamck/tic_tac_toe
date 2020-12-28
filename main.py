@@ -2,6 +2,23 @@ from tictactoe.board import *
 from tictactoe.computer import *
 import random
                         # How do I organize functions on such pages?
+
+
+if __name__ == "__main__":  # Main function that starts and runs the game
+    b = Board()
+    print("Welcome to a game of tic-tac-toe.")
+    player = choose_first_mover()
+    while True:
+        get_player_move(player, b)
+        result = b.check_result(player)
+        if result == "win":
+            declare_result(player)
+        elif result == "draw":
+            declare_result("draw")
+        else:
+            player = toggle_player(player)
+
+
 def get_player_move(player, board): # gets and makes player move from both computer and human player
     if player == "human": # This function does too much. How can I refactor?
         move = input("Enter your move > ") # In which module do I put this function?
@@ -40,18 +57,3 @@ def choose_first_mover():   # chooses whether human or comp goes first
     else:
         raise MoveError("First mover must be human or computer")
     return first_mover
-
-
-if __name__ == "__main__":
-    b = Board()
-    print("Welcome to a game of tic-tac-toe.")
-    player = choose_first_mover()
-    while True:
-        get_player_move(player, b)
-        result = b.check_result(player)
-        if result == "win":
-            declare_result(player)
-        elif result == "draw":
-            declare_result("draw")
-        else:
-            player = toggle_player(player)
