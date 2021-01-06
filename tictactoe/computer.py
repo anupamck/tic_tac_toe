@@ -5,15 +5,12 @@ import numpy
 # Should I have a class for Computer?
 
 def find_win(board, player):
-    marker = assign_marker(player)
-    result = find_win_row_column(board.matrix, marker)
-    if result == None:
-        result = find_win_row_column(board.matrix, marker, True)
+    result = find_win_row_column(board.matrix, player)
 
     if result != None:
         return result
 
-    result = find_win_diagonal(board, marker)
+    result = find_win_diagonal(board.matrix, player)
 
     if result != None:
         return result
@@ -27,42 +24,57 @@ def make_random_move(board):
     board.mark_move(move, "computer")
 
 
-def find_win_row_column(matrix, marker, transpose=False):
-    if transpose:
-        matrix = numpy.transpose(matrix).tolist()
+def find_win_row_column(matrix, player):
+    marker = assign_marker(player)
+    for transpose in (False, True):
+        if transpose:
+            matrix = numpy.transpose(matrix).tolist()
+        n_row = 0
+        for row in matrix:
+            if ''.join(row).replace(' ', '') == 2 * marker:
+                n_column = find_empty_column(row)
+                if transpose:
+                    return(n_column, n_row)
+                else:
+                    return(n_row, n_column)
+            else:
+                n_row += 1
 
+
+def find_win_diagonal(matrix, player):
+    marker = assign_marker(player)
+    for lead_diagonal in (True, False):
+        if lead_diagonal:
+            diagonal = numpy.diagonal(matrix).tolist()
+        else:
+            diagonal = numpy.diagonal(numpy.fliplr(matrix)).tolist()
+        n_row_column = 0
+        if ''.join(diagonal).replace(' ', '') == 2 * marker:
+            for element in diagonal:
+                if element == ' ':
+                    if lead_diagonal:
+                        return(n_row_column, n_row_column)
+                    else:
+                        return(n_row_column, len(matrix) - 1 - n_row_column)
+                else:
+                    n_row_column += 1
+
+def find_empty_position_row_column(matrix):
     n_row = 0
     for row in matrix:
         if ''.join(row).replace(' ', '') == 2 * marker:
-            n_column = 0
-            for column in row:
-                if column == ' ':
-                    break
-                else:
-                    n_column += 1
+            n_column = find_empty_column(row)
             if transpose:
                 return(n_column, n_row)
             else:
                 return(n_row, n_column)
-            break
         else:
             n_row += 1
 
-def find_win_diagonal(board, marker):
-    diagonal = numpy.diagonal(board.matrix).tolist()
-    n_row_column = 0
-    if ''.join(diagonal).replace(' ', '') == 2 * marker:
-        for element in diagonal:
-            if element == ' ':
-                return(n_row_column, n_row_column)
-            else:
-                n_row_column += 1
-
-    diagonal = numpy.diagonal(numpy.fliplr(board.matrix)).tolist()
-    n_row_column = 0
-    if ''.join(diagonal).replace(' ', '') == 2 * marker:
-        for element in diagonal:
-            if element == ' ':
-                return(n_row_column, board.length - 1 - n_row_column)
-            else:
-                n_row_column += 1
+def find_empty_column(row):
+    n_column = 0
+    for column in row:
+        if column == ' ':
+            return n_column
+        else:
+            n_column += 1

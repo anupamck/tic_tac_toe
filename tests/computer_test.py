@@ -2,6 +2,15 @@ from tictactoe.computer import *
 from tictactoe.board import *
 import pytest
 
+def assert_MovePlayer_player_result(test_list):
+    for test_case in test_list.values():
+        b = Board()
+        for move_player in test_case[0]:
+            move = move_player[0]
+            player = move_player[1]
+            b.mark_move(move, player)
+        assert find_win_diagonal(b, test_case[1]) == test_case[2]
+
 def test_find_win():
     b = Board()
     b.mark_move((0, 0), "computer")
@@ -45,15 +54,48 @@ def test_make_random_move():
     make_random_move(b)
     assert len(b.get_empty_positions()) == 2
 
-def test_find_winnning_position():
-    b = Board()
-    b.mark_move((0, 0), "human")
-    b.mark_move((0, 1), "human")
-    marker = assign_marker("human")
-    assert find_win_row_column(b.matrix, marker) == (0, 2)
+def test_find_win_row_column():
+    test_list = {
+    "top_row": [[((0, 0), "human"), ((0, 1), "human")], "human", (0, 2)],
+    "mid_column": [[((0, 1), "comp"), ((1, 1), "comp")], "comp", (2, 1)]
+    }
+    for test_case in test_list.values():
+        b = Board()
+        for move_player in test_case[0]:
+            move = move_player[0]
+            player = move_player[1]
+            b.mark_move(move, player)
+        assert find_win_row_column(b.matrix, test_case[1]) == test_case[2]
 
-    b = Board()
-    b.mark_move((0, 1), "computer")
-    b.mark_move((1, 1), "computer")
-    marker = assign_marker("computer")
-    assert find_win_row_column(b.matrix, marker, True) == (2, 1)
+
+def test_find_win_diagonal():
+    test_list = {
+    "lead diagonal": [[((0, 0), "human"), ((1, 1), "human")], "human", (2, 2)],
+    "opp diagonal": [[((0, 2), "comp"), ((1, 1), "comp")], "comp", (2, 0)]
+    }
+    for test_case in test_list.values():
+        b = Board()
+        for move_player in test_case[0]:
+            move = move_player[0]
+            player = move_player[1]
+            b.mark_move(move, player)
+        assert find_win_diagonal(b.matrix, test_case[1]) == test_case[2]
+
+
+def test_find_empty_column():
+    test_list = {
+    "first_column": [(' ', 'X', 'X'), 0],
+    "second_column": [('X',' ','X'), 1],
+    "third_column": [('X','X',' '), 2]
+    }
+    for test_case in test_list.values():
+        assert find_empty_column(test_case[0]) == test_case[1]
+
+# def test_find_empty_position_row_column():
+#     test_list = {
+#     "first_row": ([['X', 'X', ' '], [' ', ' ', ' '], [' ', ' ', ' ']], 'X', (0, 2)),
+#     "first_column":([['O', ' ', ' '], ['O', ' ', ' '], [' ', ' ', ' ']], 'O', (2, 0))
+#     }
+#     for test_case in test_list.values():
+#         result = find_empty_position_row_column(test_case[0], test_case[1])
+#         assert result == test_case[2]
