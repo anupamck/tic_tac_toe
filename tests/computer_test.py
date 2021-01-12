@@ -2,15 +2,6 @@ from tictactoe.computer import *
 from tictactoe.board import *
 import pytest
 
-def assert_MovePlayer_player_result(test_list):
-    for test_case in test_list.values():
-        b = Board()
-        for move_player in test_case[0]:
-            move = move_player[0]
-            player = move_player[1]
-            b.mark_move(move, player)
-        assert find_win_diagonal(b, test_case[1]) == test_case[2]
-
 def test_find_win():
     b = Board()
     b.mark_move((0, 0), "computer")
@@ -91,11 +82,11 @@ def test_find_empty_column():
     for test_case in test_list.values():
         assert find_empty_column(test_case[0]) == test_case[1]
 
-# def test_find_empty_position_row_column():
-#     test_list = {
-#     "first_row": ([['X', 'X', ' '], [' ', ' ', ' '], [' ', ' ', ' ']], 'X', (0, 2)),
-#     "first_column":([['O', ' ', ' '], ['O', ' ', ' '], [' ', ' ', ' ']], 'O', (2, 0))
-#     }
-#     for test_case in test_list.values():
-#         result = find_empty_position_row_column(test_case[0], test_case[1])
-#         assert result == test_case[2]
+def test_find_empty_diagonal_slot():
+    test_list = {
+    "lead_diagonal": [(' ', 'X', 'X'), True, (0, 0)],
+    "opp_diagonal": [('X','X',' '), False, (2, 0)]
+    }
+    for test_case in test_list.values():
+        result = find_empty_diagonal_slot(test_case[0], test_case[1])
+        assert result == test_case[2]

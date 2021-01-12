@@ -5,7 +5,7 @@ class MoveError(Exception):
 
 
 def assign_marker(player):
-    if player.lower() == "human": # Where do I put this function!?
+    if player.lower() == "human":
         return "X"
     elif player.lower() == "comp" or player.lower() == "computer":
         return "O"
@@ -24,7 +24,7 @@ def generate_matrix(length):
 
 class Board:
     def __init__(self):
-        self.__length = 3    # A matrix is better than a dictionary here
+        self.__length = 3
         self.matrix = generate_matrix(self.__length)
 
     def __get_length(self):
@@ -59,34 +59,27 @@ class Board:
                 [numpy.diagonal(self.matrix).tolist()] +
                 [numpy.diagonal(numpy.fliplr(self.matrix)).tolist()])
 
-    def check_result(self, player):
+    def check_result(self, player):         # Send for code review
         marker = assign_marker(player)
         result = ""
         near_win = False
         result_unclear = False
         sequences = self.generate_sequences()
+
         for sequence in sequences:
             sequence_string = ''.join(sequence)
             if sequence_string == 3 * marker:
-                result = "win"
-                break
-            elif sequence_string.replace(' ', '') == 2 * marker:
-                near_win = True
-            elif ' ' in sequence_string:
-                result_unclear = True
-            else:
-                result = "draw"     # Might be messy
+                return "win"
+        for sequence in sequences:
+            sequence_string = ''.join(sequence)
+            if sequence_string.replace(' ', '') == 2 * marker:
+                return "near win"
+        for sequence in sequences:
+            sequence_string = ''.join(sequence)
+            if ' ' in sequence_string:
+                return "unclear"
 
-        if result == "win":
-            return "win"
-        elif near_win:
-            return "near win"
-        elif result_unclear:
-            return "unclear"
-        elif result == "draw":
-            return "draw"
-        else:
-            raise MoveError("Unknown result encountered")
+        return "draw"
 
 
     def generate_move_list(self):
