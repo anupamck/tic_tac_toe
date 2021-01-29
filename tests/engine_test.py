@@ -4,39 +4,44 @@ from tictactoe.engine import *
 
 import pytest
 
-def test_get_player_move(monkeypatch):
-    b = Board()
-    b.mark_move((0, 0), "computer")
-    b.mark_move((1, 0), "computer")
-    get_player_move("computer", b)
-    marker = assign_marker("computer")
-    assert b.matrix[2][0] == marker
-
-    b = Board()
-    b.mark_move((0, 0), "human")
-    b.mark_move((1, 0), "human")
-    get_player_move("computer", b)
-    marker = assign_marker("computer")
-    assert b.matrix[2][0] == marker
-
-    b = Board() # mocked user input!
-    monkeypatch.setattr('builtins.input', lambda _: "tr") # '_' :is a placeholder for an input parameter
-    next_move = get_player_move("human", b)
-    marker = assign_marker("human")
-    assert b.matrix[0][2] == marker
+def test_get_player_type(monkeypatch):
+    test_list = {
+    "human": ['h', ('1', 'X'), ('human', 'X')],
+    "computer": ['c', ('2', 'O'), ('computer', 'O')]
+    }
+    for test_name, test_case in test_list.items():
+        print(test_name)
+        input, parameters, result = test_case
+        monkeypatch.setattr('builtins.input', lambda _: input)
+        number, symbol = parameters
+        return_value = get_player_type(number, symbol)
+        assert result == (return_value.type, return_value.symbol)
+        # How can I test a case with invalid input here? 
 
 
 def test_toggle_player():
-    assert toggle_player("human") == "computer"
-    assert toggle_player("computer") == "human"
+    c = Computer()
+    h = Player()
+    f = Player()
+    test_list = {
+    "human": (h, c),
+    "computer": (c, h),
+    }
+    for test_name, test_case in test_list.items():
+        print(test_name)
+        player, rival = test_case
+        assert toggle_player(player, (player, rival)) == rival
+
     with pytest.raises(MoveError):
-        toggle_player("Waldo")
+        toggle_player(f, (c, h))
 
 
 def test_choose_first_mover():
-    assert choose_first_mover() in ("human", "computer")
+    c = Computer()
+    h = Player()
+    assert choose_first_mover((c, h)) in (h, c)
 
 # def test_play_next_move():
 #         b = Board()
-#         b.mark_move("tl", "human")
-#         b.mark_move("cl", "human")
+#         b.mark_move("tl", h)
+#         b.mark_move("cl", h)

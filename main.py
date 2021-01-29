@@ -1,28 +1,18 @@
-from tictactoe.board import Board
-from tictactoe.engine import get_player_move, choose_first_mover
-from tictactoe.engine import declare_result, toggle_player
-
-# Have kept all imports minimal and clean for traceability
+from tictactoe.board import *
+from tictactoe.engine import *
+from tictactoe.engine import *
+from tictactoe.player import *
+from tictactoe.computer import *
 
 if __name__ == "__main__":
-    b = Board() # Create a new game and start it
+    # Setup a new game
     print("Welcome to a game of tic-tac-toe.")
-    player = choose_first_mover()
-    while True: # Looks like an infinite loop
-        get_player_move(player, b)  # How can I indicate where to find this? Imports?
-        result = b.check_result(player)
-        if result == "win":
-            declare_result(player)
-        elif result == "draw":
-            declare_result("draw")
-        else:
-            player = toggle_player(player)
+    b = Board()
 
-        # New game
-        # Game.start
-        # If game continues:
-            #pass
-        #Else:
-            #exit
+    # Select players
+    players = get_players()
 
-        # The game itself and the way it is run are mixed at this level
+    #Play game
+    play_game(b, players)
+
+# Sometimes my unit tests pass, but my game fails. How can I rectify this?

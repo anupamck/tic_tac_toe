@@ -3,21 +3,16 @@ import numpy
 class MoveError(Exception):
     pass
 
+class InputError(Exception):
+    pass
 
-def assign_marker(player):
-    if player.lower() == "human":
-        return "X"
-    elif player.lower() == "comp" or player.lower() == "computer":
-        return "O"
-    else:
-        raise MoveError("Player must be human or computer")
 
-def generate_matrix(length):
+def generate_matrix(length, char):
     matrix = []
     for row in range(length):
         row = []
         for column in range(length):
-            row.append(' ')
+            row.append(char)
         matrix.append(row)
     return matrix
 
@@ -25,7 +20,7 @@ def generate_matrix(length):
 class Board:
     def __init__(self):
         self.__length = 3
-        self.matrix = generate_matrix(self.__length)
+        self.matrix = generate_matrix(self.__length, ' ')
 
     def __get_length(self):
         return self.__length
@@ -47,9 +42,8 @@ class Board:
             i += 1
 
     def mark_move(self, move, player):
-        marker = assign_marker(player)
         if self.matrix[move[0]][move[1]] == " ":
-            self.matrix[move[0]][move[1]] = marker
+            self.matrix[move[0]][move[1]] = player.symbol
         else:
             raise MoveError("Cell already marked")
 
@@ -60,7 +54,6 @@ class Board:
                 [numpy.diagonal(numpy.fliplr(self.matrix)).tolist()])
 
     def check_result(self, player):         # Send for code review
-        marker = assign_marker(player)
         result = ""
         near_win = False
         result_unclear = False
@@ -68,18 +61,18 @@ class Board:
 
         for sequence in sequences:
             sequence_string = ''.join(sequence)
-            if sequence_string == 3 * marker:
+            if sequence_string == 3 * player.symbol:
                 return "win"
         for sequence in sequences:
             sequence_string = ''.join(sequence)
-            if sequence_string.replace(' ', '') == 2 * marker:
+            if sequence_string.replace(' ', '') == 2 * player.symbol:
                 return "near win"
         for sequence in sequences:
             sequence_string = ''.join(sequence)
             if ' ' in sequence_string:
                 return "unclear"
 
-        return "draw"
+        return "none"
 
 
     def generate_move_list(self):
@@ -90,14 +83,14 @@ class Board:
         return move_list
 
 
-    def mark_human_move(self, human_move):
+    def mark_human_move(self, player, move):
         legal_moves = ("tl", "tm", "tr",
                        "cl", "cm", "cr",
                        "bl", "bm", "br")
         move_list = self.generate_move_list()
-        if human_move in legal_moves:
-            move = move_list[legal_moves.index(human_move)]
-            self.mark_move(move, "human")
+        if move in legal_moves:
+            move = move_list[legal_moves.index(move)]
+            self.mark_move(move, player)
         else:
             raise MoveError("Invalid input")
 

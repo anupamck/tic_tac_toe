@@ -1,58 +1,71 @@
-from tictactoe.board import MoveError
-from tictactoe.computer import find_win, make_random_move
+from tictactoe.board import *
+from tictactoe.computer import *
 
 import random
 
-# How do I organize functions on such pages?
+# How do I organize functions on such pages? Highest level first? In order that they are referenced?
 
-def get_player_move(player, board):
-    if player == "human": # This function does too much. How can I refactor?
-        move = input("Enter your move > ") # In which module do I put this function?
-        try:
-            board.mark_human_move(move)
-        except(MoveError):
-            print("Invalid move. Try again.")
-            get_player_move(player, board)  # Recursion
-    elif player == "computer":
-        if board.check_result(player) == "near win":
-            next_move = find_win(board, player)
-            board.mark_move(next_move, player)
-        elif board.check_result("human") == "near win":
-            next_move = find_win(board, "human")
-            board.mark_move(next_move, player)
+def get_players():
+    players = []
+    player_attributes = [("1", "X"), ("2", "O")]
+    for number, symbol in player_attributes:
+        players.append(get_player_type(number, symbol))
+    return (players)
+
+
+def get_player_type(number, symbol):
+    player_type = input(f"Enter player {number} type - 'h' or 'c'")
+    if player_type.lower() in ('h', 'c'):
+        if player_type == 'h':
+            return Player(f"Player {number}", "human", symbol)
+        elif player_type == 'c':
+            return Computer(f"Computer {number}", "computer", symbol, "Easy")
         else:
-            make_random_move(board)
+            print("Invalid input")
+            get_player_type(number, symbol)
+
+
+def play_game(board, players):
+    player = choose_first_mover(players)
+    while True:
+        get_player_move(player, board, players)
+        result = board.check_result(player)
+        if result == "win":
+            declare_result(player)
+            break
+        elif result == "none":
+            declare_result("none")
+            break
+        else:
+            player = toggle_player(player, players)
+
+
+def choose_first_mover(players):
+    first_mover = random.choice(players)
+    print(f"{first_mover.name} gets to play the first move.")
+    return first_mover
+
+
+def get_player_move(player, board, players): # Should I write unit tests for this function?
+    rival = toggle_player(player, players)
+    if player.type == "human":
+        player.get_move(board)
+    elif player.type == "computer":
+        player.get_move(board, rival) # The only difference is the additional argument. How can I refector this?
     board.print_board()
 
 
-def toggle_player(player):
-    if player == "human":
-        return "computer"
-    elif player == "computer":
-        return "human"
+def toggle_player(current_player,players):
+    if current_player in players:
+        for player in players:
+            if current_player != player:
+                return player
     else:
-        raise MoveError("Player must be human or computer")
+        raise MoveError("Current player not part of players")
 
 
-def choose_first_mover():
-    first_mover = random.choice(["human", "computer"])
-    if first_mover == "human":
-        print("You get to play the first move.")
-    elif first_mover == "computer":
-        print("Computer goes first.")
-    else:
-        raise MoveError("First mover must be human or computer")
-    return first_mover
-
-def declare_result(winner):  
-    if winner == "computer": # Should I have included  this as a method inside Board?
-        print("Game over. Computer wins!")
-        exit(0)
-    elif winner == "human":
-        print("Game over. You win!")
-        exit(0)
-    elif winner == "draw":
+def declare_result(winner):
+    if winner == "none":
         print("Game over. Game drawn.")
-        exit(0)
     else:
-        MoveError("Invalid argument. Must be 'human', 'computer or 'draw")
+        print(f"Game over. {winner.name} wins!")
