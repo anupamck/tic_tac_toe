@@ -55,7 +55,7 @@ def test_check_result():
                ((1, 1), h), ((2, 0), c), ((2, 1), h), ((2, 2), c)], h, "unclear")}
 
     for test_name, test_case in test_list.items():
-        print(test_name)
+        print(test_name)     # Check if there is a better way to do this in pytest
         b = Board()
         move_list = test_case[0]
         player = test_case[1]
@@ -85,7 +85,7 @@ def test_mark_human_move_positive():
         col = test_case[1][1]
         b.mark_human_move(mover, human_move)
         assert b.matrix[row][col] == marker
-
+# Test case coverage - do you have to write one test per test path?
 
 
 def test_mark_human_move_negative(): # Is this the correct way to split +ve and -ve test cases?

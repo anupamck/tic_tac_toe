@@ -25,7 +25,8 @@ class Player:
         self.__symbol = symbol
     symbol = property(__get_symbol, __set_symbol)
 
-
+# Inheritance vs. Composition
+# Strategy could be its own class
 
 
     def find_win(self, board):      # Refactor this!
